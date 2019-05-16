@@ -1,0 +1,63 @@
+---
+title: "Data visualization HW1 - Washington Post Plot | Ukrainian Catholic University 2019"
+author: "Eduard Kovalchuk"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+
+Load libraries
+```{r}
+suppressMessages(library(ggplot2))
+suppressMessages(library(purrr))
+suppressMessages(library(dplyr))
+suppressMessages(library(tidyr))
+suppressMessages(library(cowplot))
+```
+Load data
+```{r}
+months = c("JAN.", "FEB.",	"MAR.",	"APR.",	"MAY.",	"JUN.",	"JUL.",	"AUG.",	"SEP.",	"OCT.",	"NOV.",	"DEC.")
+
+data <- read.csv("GLB.Ts+dSST.csv", skip = 1) %>% 
+  gather(Month, Diff, 2:13) %>%
+  mutate(Month = paste(toupper(Month), ".", sep=""))
+
+data$Month <- factor(data$Month, levels=months)
+
+data
+```
+Plot
+```{r}
+ggplot(data, aes(Month, Year, fill = Diff)) + 
+  geom_tile() +
+  ggtitle("Monthly global temperatures compared to baseline") +
+  geom_vline(xintercept = seq(1.5, 11.5, 1), color = "white") + 
+  geom_hline(yintercept = 1878, colour = "black") +
+  theme_light() +
+  theme(
+    panel.border = element_blank(),
+    legend.position = "top",
+    legend.spacing.x = unit(-1.2,"cm"),
+    legend.text = element_text(vjust = 8),
+    axis.title = element_blank(),
+    axis.text.y = element_text(face = c(rep("plain", 7), "bold")),
+    axis.text.x = element_text(margin = margin(10,10,10,10)),
+    axis.ticks.y = element_line(size = c(rep(0.3, 7), 1), colour = c(rep("gray", 7), "gray25")),
+    axis.ticks.x = element_blank(),
+    axis.ticks.length = unit(0.2, "cm"),
+    plot.title = element_text("Monthly global temperatures compared to baseline", face = "bold", hjust = -0.2),
+    plot.caption=element_text(size=10, hjust=-0.1, margin=margin(13,0,0,0), colour = "gray10")
+  ) +
+  scale_y_reverse(expand=c(0.005, 0), breaks = c(pretty(data$Year, n=7), 2017)) +
+  scale_x_discrete(expand = c(0,0), position = "top") +
+  scale_fill_gradient2(
+    low = "#6590C7",
+    high = "#F38284",
+    labels = c("-1.5ºF\ncooler", " 0ºF\n", "  2.5ºF\nwarmer"),
+    breaks = c(-0.8, 0, 1.3),
+    guide = guide_colourbar(direction = "horizontal", title = NULL, ticks = FALSE, barwidth = 19, barheight = 1, label.hjust = c(1.5, 0, -0.55))) +
+  labs(caption="Baseline temperature is average between 1951 and 1980\n         ⸻\n      Source: NASA")
+
+```
+
