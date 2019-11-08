@@ -1,0 +1,100 @@
+---
+title: "Ukraine population prospects"
+output:
+  html_document:
+    df_print: paged
+---
+```{r}
+library(ggplot2)
+library(dplyr)
+```
+
+
+#### Load data
+```{r}
+data <- read.csv("population_prospects.csv")
+data <- data %>% mutate(population = population / 1000)
+data
+```
+Styles used:  
+
+Blue  #3288bd  
+Red - #d53e4f  
+Gray - #5D646F  
+Grid - #5D646F  
+Background - #F3F7F7  
+
+Font Family - Ubuntu Mono  
+Font Size:  
+Title - 30  
+Subtitle - 18  
+Axis - 13  
+  
+#### Create vizualization
+```{r}
+ggplot(data, aes(x = year)) +
+  geom_line(
+    data = filter(data, type == "estimate"),
+    aes(y = population),
+    color = "#3288bd",
+    size = 0.65
+  ) +
+  geom_line(
+    data = filter(data, type == "medium variant"),
+    aes(y = population),
+    linetype = "dashed",
+    color = "#d53e4f",
+    size = 0.65
+  ) +
+  geom_line(
+    data = filter(data, type == "high variant"),
+    aes(y = population),
+    linetype = "dashed",
+    color = "#d53e4f",
+    size = 0.65
+  ) +
+  geom_line(
+    data = filter(data, type == "constant fertility"),
+    aes(y = population),
+    linetype = "dashed",
+    color = "#d53e4f",
+    size = 0.65
+  ) + 
+  geom_line(
+    data = filter(data, type == "instant replacement"),
+    aes(y = population),
+    linetype = "dashed",
+    color = "#d53e4f",
+    size = 0.65
+  ) + 
+  geom_line(
+    data = filter(data, type == "momentum"),
+    aes(y = population),
+    linetype = "dashed",
+    color = "#d53e4f",
+    size = 0.65
+  ) + 
+  geom_line(
+    data = filter(data, type == "zero migration"),
+    aes(y = population),
+    linetype = "dashed",
+    color = "#d53e4f",
+    size = 0.65
+  ) + 
+  geom_line(
+    data = filter(data, type == "constant mortality"),
+    aes(y = population),
+    linetype = "dashed",
+    color = "#d53e4f",
+    size = 0.65
+  ) + 
+  geom_line(
+    data = filter(data, type == "no change"),
+    aes(y = population),
+    linetype = "dashed",
+    color = "#d53e4f",
+    size = 0.65
+  ) +
+  theme(axis.title =  element_blank(), plot.background = element_rect(fill = "#F3F7F7"), panel.background = element_rect(fill = "#F3F7F7"))
+```
+
