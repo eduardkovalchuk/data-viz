@@ -1,16 +1,13 @@
 ---
 title: "Ukraine population prospects"
 output:
-  pdf_document: default
   html_document:
     df_print: paged
+  pdf_document: default
 ---
 ```{r}
 library(ggplot2)
 library(dplyr)
-library(extrafont)
-loadfonts(device = "win")
-windowsFonts("Ubuntu Mono" = windowsFont("Ubuntu Mono"))
 ```
 
 
@@ -36,76 +33,110 @@ Axis - 13
   
 #### Create vizualization
 ```{r}
-ggplot(data, aes(x = year)) +
+p <- ggplot(data, aes(x = year)) +
   geom_line(
     data = filter(data, type == "estimate"),
     aes(y = population),
     color = "#3288bd",
-    size = 0.65
+    size = 0.9
   ) +
   geom_line(
     data = filter(data, type == "medium variant"),
     aes(y = population),
     linetype = "dashed",
     color = "#d53e4f",
-    size = 0.65
+    size = 0.9
   ) +
   geom_line(
     data = filter(data, type == "high variant"),
     aes(y = population),
     linetype = "dashed",
     color = "#d53e4f",
-    size = 0.65
+    size = 0.9
   ) +
   geom_line(
     data = filter(data, type == "constant fertility"),
     aes(y = population),
     linetype = "dashed",
     color = "#d53e4f",
-    size = 0.65
+    size = 0.9
   ) +
   geom_line(
     data = filter(data, type == "instant replacement"),
     aes(y = population),
     linetype = "dashed",
     color = "#d53e4f",
-    size = 0.65
+    size = 0.9
   ) +
   geom_line(
     data = filter(data, type == "momentum"),
     aes(y = population),
     linetype = "dashed",
     color = "#d53e4f",
-    size = 0.65
+    size = 0.9
   ) +
   geom_line(
     data = filter(data, type == "zero migration"),
     aes(y = population),
     linetype = "dashed",
     color = "#d53e4f",
-    size = 0.65
+    size = 0.9
   ) +
   geom_line(
     data = filter(data, type == "constant mortality"),
     aes(y = population),
     linetype = "dashed",
     color = "#d53e4f",
-    size = 0.65
+    size = 0.9
   ) +
   geom_line(
     data = filter(data, type == "no change"),
     aes(y = population),
     linetype = "dashed",
     color = "#d53e4f",
-    size = 0.65
+    size = 0.9
+  ) +
+  geom_line(
+    data = filter(data, type == "low variant"),
+    aes(y = population),
+    linetype = "dashed",
+    color = "#d53e4f",
+    size = 0.9
   ) +
   theme(
     axis.title =  element_blank(),
+    axis.ticks = element_blank(),
     plot.background = element_rect(fill = "#F3F7F7"),
     panel.background = element_rect(fill = "#F3F7F7"),
-    title = element_text(size = 30),
-    text = element_text(family = "Ubuntu Mono", colour = "#5D646F")
+    panel.grid = element_line(colour = "#5D646F", linetype = "dotted", size = 0.2),
+    text = element_text(family = "Ubuntu Mono", colour = "#5D646F"),
+    axis.text = element_text(size = 13),
+    axis.text.y = element_text(margin = margin(10,-10,10,0)),
+    # axis.title.x = element_text(margin = unit(c(10,10,10), "mm")),  
+    plot.title = element_text(size = 30, hjust = 0, face = "bold"),
+    plot.subtitle = element_text(size = 18, hjust = 0),
+    plot.margin = margin(40,150,80,40)
+    # panel.spacing = unit(c(1,1,1,1), "cm")
   ) +
-  ggtitle("Ukraine Population Prospects")
+  ggtitle("Ukraine Population Prospects", subtitle = "Total population, million") + 
+  scale_y_continuous(limits = c(10, 54), breaks = seq(15, 50, 5), minor_breaks = NULL, expand=c(0,-4,0,0)) + 
+  scale_x_continuous(limits = c(1950, 2114), breaks = c(1950, 1991, 2020, 2100), minor_breaks = NULL, expand=c(0,4,0,-12)) +
+  annotate("text", x = 2114, y = 39, label = "instant replacement", family = "Ubuntu Mono", colour = "#5D646F", size = 4.5) +
+  annotate("text", x = 2110, y = 37.4, label = "high variant", family = "Ubuntu Mono", colour = "#d53e4f", size = 4.5, fontface = "bold") +
+  annotate("text", x = 2108, y = 34.3, label = "momentum", family = "Ubuntu Mono", colour = "#5D646F", size = 4.5) +
+  annotate("text", x = 2111, y = 25, label = "medium variant", family = "Ubuntu Mono", colour = "#d53e4f", size = 4.5, fontface = "bold") +
+  annotate("text", x = 2111, y = 24, label = "zero migration", family = "Ubuntu Mono", colour = "#5D646F", size = 4.5) +
+  annotate("text", x = 2113, y = 21.7, label = "constant fertility", family = "Ubuntu Mono", colour = "#5D646F", size = 4.5) +
+  annotate("text", x = 2113, y = 20.7, label = "constant mortality", family = "Ubuntu Mono", colour = "#5D646F", size = 4.5) +
+  annotate("text", x = 2108, y = 17.7, label = "no change", family = "Ubuntu Mono", colour = "#5D646F", size = 4.5) +
+  annotate("text", x = 2109, y = 15, label = "low variant", family = "Ubuntu Mono", colour = "#d53e4f", size = 4.5, fontface = "bold") +
+  annotate("text", x = 2109, y = 15, label = "low variant", family = "Ubuntu Mono", colour = "#d53e4f", size = 4.5, fontface = "bold") +
+  annotate("text", x = 2057, y = 53, label = "projection", family = "Ubuntu Mono", colour = "#d53e4f", size = 5) +
+  annotate("text", x = 1986, y = 53, label = "estimate", family = "Ubuntu Mono", colour = "#3288bd", size = 5) +
+  annotate("text", x = 2098, y = 10, label = "Data: UN World Population Prospects", family = "Ubuntu Mono", colour = "#5D646F", size = 5) +
+  coord_cartesian(clip = "off")
+p
+
+ggsave("Eduard_Kovalchuk_HW_1.png", width = 13.9, height = 9.02, units = "in", device = "png", dpi = "screen")
 ```
 
