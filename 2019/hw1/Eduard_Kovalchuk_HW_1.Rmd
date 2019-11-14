@@ -1,12 +1,16 @@
 ---
 title: "Ukraine population prospects"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
 ---
 ```{r}
 library(ggplot2)
 library(dplyr)
+library(extrafont)
+loadfonts(device = "win")
+windowsFonts("Ubuntu Mono" = windowsFont("Ubuntu Mono"))
 ```
 
 
@@ -59,35 +63,35 @@ ggplot(data, aes(x = year)) +
     linetype = "dashed",
     color = "#d53e4f",
     size = 0.65
-  ) + 
+  ) +
   geom_line(
     data = filter(data, type == "instant replacement"),
     aes(y = population),
     linetype = "dashed",
     color = "#d53e4f",
     size = 0.65
-  ) + 
+  ) +
   geom_line(
     data = filter(data, type == "momentum"),
     aes(y = population),
     linetype = "dashed",
     color = "#d53e4f",
     size = 0.65
-  ) + 
+  ) +
   geom_line(
     data = filter(data, type == "zero migration"),
     aes(y = population),
     linetype = "dashed",
     color = "#d53e4f",
     size = 0.65
-  ) + 
+  ) +
   geom_line(
     data = filter(data, type == "constant mortality"),
     aes(y = population),
     linetype = "dashed",
     color = "#d53e4f",
     size = 0.65
-  ) + 
+  ) +
   geom_line(
     data = filter(data, type == "no change"),
     aes(y = population),
@@ -95,6 +99,13 @@ ggplot(data, aes(x = year)) +
     color = "#d53e4f",
     size = 0.65
   ) +
-  theme(axis.title =  element_blank(), plot.background = element_rect(fill = "#F3F7F7"), panel.background = element_rect(fill = "#F3F7F7"))
+  theme(
+    axis.title =  element_blank(),
+    plot.background = element_rect(fill = "#F3F7F7"),
+    panel.background = element_rect(fill = "#F3F7F7"),
+    title = element_text(size = 30),
+    text = element_text(family = "Ubuntu Mono", colour = "#5D646F")
+  ) +
+  ggtitle("Ukraine Population Prospects")
 ```
 
